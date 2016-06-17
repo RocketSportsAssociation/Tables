@@ -1,0 +1,3 @@
+package: github.com/RocketSportsAssociation/Tables
+import:
+- package: github.com/RocketSportsAssociation/matcher
