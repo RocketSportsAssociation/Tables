@@ -51,7 +51,7 @@ Week %d Standings</td></tr>
 <td align="right" width="10%%">WIN %%</td>
 <td align="right" width="10%%">GD</td>
 <td align="right" width="10%%">GF</td>
-<td align="right" width="10%%">GA</td></tr>\n\n
+<td align="right" width="10%%">GA</td></tr>
 %s
 </table></body></html>
 `
