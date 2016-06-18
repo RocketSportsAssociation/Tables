@@ -27,7 +27,7 @@ Week 2 Standings</td></tr>
 <td align="right" width="10%">WIN %</td>
 <td align="right" width="10%">GD</td>
 <td align="right" width="10%">GF</td>
-<td align="right" width="10%">GA</td></tr>\n\n
+<td align="right" width="10%">GA</td></tr>
 <tr class="oddrow"><td>Recycer</td><td align="right">5</td><td align="right">4</td><td align="right">0</td><td align="right">1</td><td align="right">13</td><td align="right">0.800</td><td align="right">-6</td><td align="right">18</td><td align="right">24</td></tr>
 
 <tr class="evenrow"><td>IceyCocaine</td><td align="right">5</td><td align="right">4</td><td align="right">1</td><td align="right">0</td><td align="right">12</td><td align="right">0.800</td><td align="right">46</td><td align="right">65</td><td align="right">19</td></tr>
