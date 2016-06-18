@@ -42,16 +42,16 @@ func main() {
 
 Week %d Standings</td></tr>
 
-<tr class="stathead"><td width="10%%">TEAM</td>
+<tr class="stathead"><td width="31%%">TEAM</td>
 <td align="right" width="10%%">GP</td>
-<td align="right" width="10%%">W</td>
-<td align="right" width="10%%">L</td>
-<td align="right" width="10%%">D</td>
-<td align="right" width="10%%">PTS</td>
+<td align="right" width="7%%">W</td>
+<td align="right" width="7%%">L</td>
+<td align="right" width="7%%">D</td>
+<td align="right" width="7%%">PTS</td>
 <td align="right" width="10%%">WIN %%</td>
-<td align="right" width="10%%">GD</td>
-<td align="right" width="10%%">GF</td>
-<td align="right" width="10%%">GA</td></tr>\n\n
+<td align="right" width="7%%">GD</td>
+<td align="right" width="7%%">GF</td>
+<td align="right" width="7%%">GA</td></tr>\n\n
 %s
 </table></body></html>
 `
