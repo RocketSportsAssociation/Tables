@@ -68,18 +68,12 @@ func main() {
 <th>L</th>
 <th>D</th>
 <th>PTS</th>
-<th>WIN %</th>
+<th>WIN %%</th>
 <th>GD</th>
 <th>GF</th>
-<th>GA</th></tr>%s
+<th>GA</th></tr>
 
-
-
-
-
-
-
-
+%s
 
 </table>
 </body></html>
