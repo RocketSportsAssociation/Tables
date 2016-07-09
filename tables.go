@@ -1,99 +1,92 @@
 package main
 
 import (
-    matcher "github.com/RocketSportsAssociation/matcher"
-    "github.com/gocarina/gocsv"
-    "flag"
-    "fmt"
-    "os"
-    "container/heap"
+	"strings"
+	"fmt"
+	"bufio"
+	"flag"
+	"os"
 )
 
-var rankFileName = flag.String("ranks", "", "A CSV file with team ranks.")
-var week = flag.Int("week", 0, "The week number")
+const (
+    tableFmt = `<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <title>%s</title>
+    <meta name="viewport" content="initial-scale=1.0; maximum-scale=1.0; width=device-width;">
+</head>
+
+<body>
+<table class="tablesorter">
+<thead>
+%s
+</thead>
+<tbody class="table-hover">
+%s
+</tbody>
+</table>
+  
+
+  </body>
+`
+
+    tableHeader = `<th class="text-left">%s</th>
+`
+
+    tableRow = `<tr>
+%s
+</tr>
+`
+
+    tableRowElem = `<td class="text-left">%s</td>
+`
+)
+
+var title = flag.String("title", "Table", "The title of the table being generated.")
+var csvFile = flag.String("file", "", "A CSV file.")
 
 func main() {
-    flag.Parse()
+	flag.Parse()
 
-    if *rankFileName == "" {
-        flag.PrintDefaults()
-        return
+	if *csvFile == "" {
+		flag.PrintDefaults()
+		return
+	}
+
+	file, err := os.Open(*csvFile)
+	if err != nil {
+        fmt.Println("The file is messed up in some way, dummy")
+		panic(err)
+	}
+	defer file.Close()
+
+    lineScan := bufio.NewScanner(file)
+
+
+    _ = lineScan.Scan()
+    headers := lineScan.Text()
+    headerList := strings.Split(headers, ",")
+    headerStr := ""
+    for _,h := range headerList {
+        headerStr += fmt.Sprintf(tableHeader, h)
     }
+    //fmt.Println(headerStr)
 
-    rankFile, err := os.Open(*rankFileName)
-    if err != nil {
-        panic(err)
-    }
-    defer rankFile.Close()
-
-    unsortedRanks := []*matcher.TeamRank{}
-    if err := gocsv.UnmarshalFile(rankFile, &unsortedRanks); err != nil {
-        panic(err)
-    }
-
-    ranks := &matcher.RankedList{}
-    heap.Init(ranks)
-
-    for _, r := range unsortedRanks {
-        heap.Push(ranks, *r)
-    }
-
-    tableFmt :=
- `<html>
-<head>
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-<link href="http://dynasties.operationsports.com/css/osdyn.css" rel="stylesheet" type="text/css">
-</head><body><table cellpadding="3" cellspacing="1" class="osdyn" width="900">
-
-
-
-<tr class="masthead_alt"><td bgcolor="#025C9A" colspan="10">Week %d Standings</tr>
-
-<col width = "37%%">
-<col width = "7%%">
-<col width = "7%%">
-<col width = "7%%">
-<col width = "7%%">
-<col width = "7%%">
-<col width = "7%%">
-<col width = "7%%">
-<col width = "7%%">
-
-
-
-<tr class="stathead">
-<th>TEAM</th>
-<th>GP</th>
-<th>W</th>
-<th>L</th>
-<th>D</th>
-<th>PTS</th>
-<th>WIN %%</th>
-<th>GD</th>
-<th>GF</th>
-<th>GA</th></tr>
-
-%s
-
-</table>
-</body></html>
-`
-/*
-<tr class="evenrow"><td>[TEAMNAME]</td><td align="right">[GAMESPLAYED]</td><td align="right">[WINS]</td><td align="right">[LOSSES]</td><td align="right">[DRAWS]</td><td align="right">[POINTS]</td><td align="right">[WIN%]</td><td align="right">[GD]</td><td align="right">[GF]</td><td align="right">[GA]</td></tr>
-*/
-    teamStr := ""
-    teamFmt := `<tr class="%s"><td>%s</td><td align="right">%d</td><td align="right">%d</td><td align="right">%d</td><td align="right">%d</td><td align="right">%d</td><td align="right">%s</td><td align="right">%d</td><td align="right">%d</td><td align="right">%d</td></tr>
-
-`
-    teamNum := 1
-    for ranks.Len() > 0 {
-        row := "oddrow"
-        if teamNum % 2 == 0 {
-            row = "evenrow"
+    tableRowStr := ""
+    for lineScan.Scan() {
+        s := lineScan.Text()
+        ss := strings.Split(s, ",")
+        rowElemStr := ""
+        for _, elem := range ss {
+            rowElemStr += fmt.Sprintf(tableRowElem, elem)
         }
-        teamNum++
-        team := heap.Pop(ranks).(matcher.TeamRank)
-        teamStr += fmt.Sprintf(teamFmt, row, team.Name, team.Played, team.Wins, team.Losses, team.Draws, team.Points, team.WinPercentage, team.GoalDiff, team.GoalsFor, team.GoalsAgainst)
+        tableRowStr += fmt.Sprintf(tableRow, rowElemStr)
     }
-    fmt.Printf(tableFmt, *week, teamStr)
+
+    fmt.Printf(tableFmt, *title, headerStr, tableRowStr)
+
+/*    
+
+
+*/
 }
