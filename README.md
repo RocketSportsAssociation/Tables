@@ -12,7 +12,10 @@ $ ./Tables
     	A CSV file.
   -title string
     	The title of the table being generated. (default "Table")
-    	```
+```
+
+
+## Example
 
 `./bin/Tables -file my.csv -title FooBar`
 
