@@ -1,15 +1,15 @@
 package main
 
 import (
-	"strings"
-	"fmt"
 	"bufio"
 	"flag"
+	"fmt"
 	"os"
+	"strings"
 )
 
 const (
-    tableFmt = `<html lang="en">
+	tableFmt = `<html lang="en">
 <head>
     <meta charset="utf-8" />
     <title>%s</title>
@@ -30,15 +30,15 @@ const (
   </body>
 `
 
-    tableHeader = `<th class="text-left">%s</th>
+	tableHeader = `<th class="text-left">%s</th>
 `
 
-    tableRow = `<tr>
+	tableRow = `<tr>
 %s
 </tr>
 `
 
-    tableRowElem = `<td class="text-left">%s</td>
+	tableRowElem = `<td class="text-left">%s</td>
 `
 )
 
@@ -55,38 +55,32 @@ func main() {
 
 	file, err := os.Open(*csvFile)
 	if err != nil {
-        fmt.Println("The file is messed up in some way, dummy")
+		fmt.Println("The file is messed up in some way, dummy")
 		panic(err)
 	}
 	defer file.Close()
 
-    lineScan := bufio.NewScanner(file)
+	lineScan := bufio.NewScanner(file)
 
+	_ = lineScan.Scan()
+	headers := lineScan.Text()
+	headerList := strings.Split(headers, ",")
+	headerStr := ""
+	for _, h := range headerList {
+		headerStr += fmt.Sprintf(tableHeader, h)
+	}
+	//fmt.Println(headerStr)
 
-    _ = lineScan.Scan()
-    headers := lineScan.Text()
-    headerList := strings.Split(headers, ",")
-    headerStr := ""
-    for _,h := range headerList {
-        headerStr += fmt.Sprintf(tableHeader, h)
-    }
-    //fmt.Println(headerStr)
+	tableRowStr := ""
+	for lineScan.Scan() {
+		s := lineScan.Text()
+		ss := strings.Split(s, ",")
+		rowElemStr := ""
+		for _, elem := range ss {
+			rowElemStr += fmt.Sprintf(tableRowElem, elem)
+		}
+		tableRowStr += fmt.Sprintf(tableRow, rowElemStr)
+	}
 
-    tableRowStr := ""
-    for lineScan.Scan() {
-        s := lineScan.Text()
-        ss := strings.Split(s, ",")
-        rowElemStr := ""
-        for _, elem := range ss {
-            rowElemStr += fmt.Sprintf(tableRowElem, elem)
-        }
-        tableRowStr += fmt.Sprintf(tableRow, rowElemStr)
-    }
-
-    fmt.Printf(tableFmt, *title, headerStr, tableRowStr)
-
-/*    
-
-
-*/
+	fmt.Printf(tableFmt, *title, headerStr, tableRowStr)
 }
